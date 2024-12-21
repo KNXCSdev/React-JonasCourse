@@ -16,6 +16,7 @@ StarRating.propTypes = {
   defaultRating: PropTypes.number,
   color: PropTypes.string,
   size: PropTypes.number,
+  messages: PropTypes.array,
   className: PropTypes.string,
   onSetRating: PropTypes.func,
 };
@@ -24,12 +25,18 @@ export default function StarRating({
   maxRating = 5,
   color = "#fcc419",
   size = 48,
-  className,
+  className = "",
+  messages = [],
   defaultRating = 0,
   onSetRating,
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
+
+  function handleRating(rating) {
+    setRating(rating);
+    onSetRating(rating);
+  }
 
   const textStyle = {
     lineHeight: "1",
@@ -37,11 +44,6 @@ export default function StarRating({
     color,
     fontSize: `${size / 1.5}px`,
   };
-
-  function handleRating(rating) {
-    setRating(rating);
-    onSetRating(rating);
-  }
 
   return (
     <div style={containerStyle} className={className}>
@@ -58,7 +60,11 @@ export default function StarRating({
           />
         ))}
       </div>
-      <p style={textStyle}>{tempRating || rating || ""}</p>
+      <p style={textStyle}>
+        {messages.length === maxRating
+          ? messages[tempRating ? tempRating - 1 : rating - 1]
+          : tempRating || rating || ""}
+      </p>
     </div>
   );
 }
@@ -70,6 +76,7 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
     display: "block",
     cursor: "pointer",
   };
+
   return (
     <span
       role="button"

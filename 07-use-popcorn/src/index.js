@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 // import StarRating from "./StarRating";
 import "./index.css";
 import App from "./App";
+import Challenge from "./challenge";
 
 function Test() {
   const [movieRating, setMovieRating] = useState(0);
@@ -21,6 +22,8 @@ root.render(
     {/* <Test></Test> */}
     {/* <StarRating maxRating={5} />
      */}
-    <App></App>
+    {/* <App></App> */}
+
+    <Challenge></Challenge>
   </React.StrictMode>
 );

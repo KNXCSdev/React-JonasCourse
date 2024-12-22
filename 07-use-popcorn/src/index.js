@@ -22,8 +22,8 @@ root.render(
     {/* <Test></Test> */}
     {/* <StarRating maxRating={5} />
      */}
-    {/* <App></App> */}
+    <App></App>
 
-    <Challenge></Challenge>
+    {/* <Challenge></Challenge> */}
   </React.StrictMode>
 );

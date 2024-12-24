@@ -6,15 +6,20 @@ import Main from "./Main";
 import Loader from "./Loader";
 import Error from "./Error";
 import Ready from "./Ready";
+import Question from "./Question";
 
 const initialState = {
   questions: [],
 
   //Loading,Error,Ready,Active,Finished
   status: "loading",
+  index: 0,
+  answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
+  console.log(state);
   switch (action.type) {
     case "dataReceived":
       return { ...state, questions: action.payload, status: "ready" };
@@ -23,7 +28,16 @@ function reducer(state, action) {
       return { ...state, status: "error" };
 
     case "ready":
-      return { ...state, questions: action.payload, status: "active" };
+      return { ...state, status: "active" };
+
+    case "newAnswer":
+      const question = state.questions.at(state.index);
+
+      return {
+        ...state,
+        answer: action.payload,
+        points: action.payload === question.correctOption ? state.points + 1 : state.points,
+      };
 
     default:
       throw new Error("Action unknown");
@@ -32,7 +46,7 @@ function reducer(state, action) {
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { status, questions } = state;
+  const { status, questions, index, answer } = state;
 
   const numQuestions = questions.length;
 
@@ -50,7 +64,10 @@ export default function App() {
       <Main>
         {status === "loading" && <Loader></Loader>}
         {status === "error" && <Error></Error>}
-        {status === "ready" && <Ready numQuestions={numQuestions}></Ready>}
+        {status === "ready" && <Ready numQuestions={numQuestions} dispatch={dispatch}></Ready>}
+        {status === "active" && (
+          <Question question={questions[index]} answer={answer} dispatch={dispatch}></Question>
+        )}
       </Main>
     </div>
   );
